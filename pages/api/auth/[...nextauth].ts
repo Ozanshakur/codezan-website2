@@ -1,9 +1,18 @@
-import NextAuth from 'next-auth'
+import NextAuth, { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import prisma from '@/lib/prisma'
 import bcrypt from 'bcrypt'
+import { DefaultSession } from "next-auth"
 
-export default NextAuth({
+declare module "next-auth" {
+  interface Session extends DefaultSession {
+    user?: {
+      id: string;
+    } & DefaultSession["user"]
+  }
+}
+
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -49,10 +58,12 @@ export default NextAuth({
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id
+        session.user.id = token.id as string
       }
       return session
     },
   },
-})
+}
+
+export default NextAuth(authOptions)
 
