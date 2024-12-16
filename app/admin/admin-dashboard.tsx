@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 
 interface ContactRequest {
   id: number
@@ -16,18 +15,11 @@ export function AdminDashboard() {
   const [contactRequests, setContactRequests] = useState<ContactRequest[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
-  const { data: session, status } = useSession()
-  const router = useRouter()
+  const { data: session } = useSession()
 
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [passwordChangeMessage, setPasswordChangeMessage] = useState('')
-
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/admin/login')
-    }
-  }, [status, router])
 
   useEffect(() => {
     const fetchContactRequests = async () => {
@@ -73,14 +65,6 @@ export function AdminDashboard() {
     } catch (error) {
       setPasswordChangeMessage('An error occurred. Please try again.')
     }
-  }
-
-  if (status === 'loading') {
-    return <div>Loading...</div>
-  }
-
-  if (!session) {
-    return null
   }
 
   return (
