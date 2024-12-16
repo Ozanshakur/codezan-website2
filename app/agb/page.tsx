@@ -1,5 +1,5 @@
 import { NavBar } from '@/components/nav-bar'
-import { Footer } from '@/components/footer'
+import { Footer } from '@/components/Footer'
 import { LegalPageHeader } from '@/components/legal-page-header'
 
 export default function AGBPage() {
